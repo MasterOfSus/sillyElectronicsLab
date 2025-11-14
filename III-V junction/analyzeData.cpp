@@ -71,20 +71,25 @@ void analyzeData() {
 		IVGraphGe->SetPointY(i, log(IVGraphGe->GetPointY(i)));
 		double ey {IVGraphGe->GetErrorY(i)};
 		IVGraphGe->SetPointError(i, IVGraphGe->GetErrorX(i), IVGraphGe->GetErrorY(i)/y);
-		std::cout << "Error set to " << IVGraphGe->GetErrorY(i) << " for point Y " << y << " with Y error " << ey << std::endl;
+		//std::cout << "Error set to " << IVGraphGe->GetErrorY(i) << " for point Y " << y << " with Y error " << ey << std::endl;
 	}
 	for (int i {0}; i < IVGraphSi->GetN(); ++i) {
 		double y {IVGraphSi->GetPointY(i)};
 		IVGraphSi->SetPointY(i, log(IVGraphSi->GetPointY(i)));
 		double ey {IVGraphSi->GetErrorY(i)};
 		IVGraphSi->SetPointError(i, IVGraphSi->GetErrorX(i), IVGraphSi->GetErrorY(i)/y);
-		std::cout << "Error set to " << IVGraphSi->GetErrorY(i) << " for point Y " << y << " with Y error " << ey << std::endl;
+		//std::cout << "Error set to " << IVGraphSi->GetErrorY(i) << " for point Y " << y << " with Y error " << ey << std::endl;
 	}
 	//	uncomment these and insert appropriate values to reduce the function fit range to the valid data
 	IVGeFunct->SetRange(150., 400.);
 	IVSiFunct->SetRange(350., 750.);
+	std::cout << "\nGermanium fit results:\n";
 	IVGraphGe->Fit(IVGeFunct, "R");
+	std::cout << "Final #etaV_T = " << 1/IVGeFunct->GetParameter(1) << ", I0 = " << IVGeFunct->GetParameter(0) << std::endl;
+	std::cout << "\nSilicon fit results:\n";
 	IVGraphSi->Fit(IVSiFunct, "R");
+	std::cout << "Final #etaV_T = " << 1/IVSiFunct->GetParameter(1) << ", I0 = " << IVSiFunct->GetParameter(0) << std::endl;
+	std::cout << "\nFinal #etaV_T ratio, Si/Ge: " << IVGeFunct->GetParameter(1)/IVSiFunct->GetParameter(1) << std::endl;
 
 	TCanvas* IVCnvs = new TCanvas("IVCnvs", "Fit Results", 1200, 500);
 	IVCnvs->Divide(2);
