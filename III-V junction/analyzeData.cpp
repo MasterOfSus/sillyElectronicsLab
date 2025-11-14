@@ -57,9 +57,9 @@ void analyzeData() {
 	IVGeFunct->SetNpx(1000);
 	IVSiFunct->SetNpx(1000);
 
-	IVGeFunct->SetParameters(1., 39.);
-	IVSiFunct->SetParameters(1., 19.);
-
+	IVGeFunct->SetParameters(1., 0.5);
+	IVSiFunct->SetParameters(1., 0.5);
+	
 	for (int i {0}; i < IVGraphGe->GetN(); ++i) {
 		IVGraphGe->SetPointY(i, log(IVGraphGe->GetPointY(i)));
 		IVGraphGe->SetPointError(IVGraphGe->GetErrorX(i), IVGraphGe->GetErrorY(i)/IVGraphGe->GetPointY(i));
@@ -69,10 +69,8 @@ void analyzeData() {
 		IVGraphSi->SetPointError(IVGraphSi->GetErrorX(i), IVGraphSi->GetErrorY(i)/IVGraphSi->GetPointY(i));
 	}
 	//	uncomment these and insert appropriate values to reduce the function fit range to the valid data
-	/*
-	IVGeFunct->SetRange();
-	IVSiFunct->SetRange();
-	*/
+	//IVGeFunct->SetRange();
+	//IVSiFunct->SetRange();
 	IVGraphGe->Fit(IVGeFunct);
 	IVGraphSi->Fit(IVSiFunct);
 
