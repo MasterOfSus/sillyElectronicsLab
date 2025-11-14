@@ -69,15 +69,16 @@ void analyzeData() {
 	for (int i {0}; i < IVGraphGe->GetN(); ++i) {
 		double y {IVGraphGe->GetPointY(i)};
 		IVGraphGe->SetPointY(i, log(IVGraphGe->GetPointY(i)));
-		IVGraphGe->SetPointError(IVGraphGe->GetErrorX(i), IVGraphGe->GetErrorY(i)/y);
-		std::cout << "Error set to " << IVGraphGe->GetErrorX(i) << " for point X " << IVGraphGe->GetPointX(i) << std::endl;
+		double ey {IVGraphGe->GetErrorY(i)};
+		IVGraphGe->SetPointError(i, IVGraphGe->GetErrorX(i), IVGraphGe->GetErrorY(i)/y);
+		std::cout << "Error set to " << IVGraphGe->GetErrorY(i) << " for point Y " << y << " with Y error " << ey << std::endl;
 	}
 	for (int i {0}; i < IVGraphSi->GetN(); ++i) {
 		double y {IVGraphSi->GetPointY(i)};
 		IVGraphSi->SetPointY(i, log(IVGraphSi->GetPointY(i)));
 		double ey {IVGraphSi->GetErrorY(i)};
-		IVGraphSi->SetPointError(IVGraphSi->GetErrorX(i), IVGraphSi->GetErrorY(i)/y);
-		//std::cout << "Error set to " << IVGraphSi->GetErrorY(i) << " for point Y " << y << " with Y error " << ey << std::endl;
+		IVGraphSi->SetPointError(i, IVGraphSi->GetErrorX(i), IVGraphSi->GetErrorY(i)/y);
+		std::cout << "Error set to " << IVGraphSi->GetErrorY(i) << " for point Y " << y << " with Y error " << ey << std::endl;
 	}
 	//	uncomment these and insert appropriate values to reduce the function fit range to the valid data
 	IVGeFunct->SetRange(150., 400.);
