@@ -43,6 +43,12 @@ void analyzeData() {
 	IVGraphSi->SetMarkerStyle(33);
 	IVGraphGe->SetMarkerColor(kGreen - 1);
 	IVGraphSi->SetMarkerColor(kBlue - 6);
+	IVGraphGe->SetDrawOption("APE");
+	IVGraphSi->SetDrawOption("APE");
+
+	TFile* output = new TFile("analyzedData.root", "RECREATE", "Analyzed data");
+	IVGraphGe->Write("Non-linearized IVGraphGe");
+	IVGraphSi->Write("Non-linearized IVGraphSi");
 
 	TF1* IVGeFunct = new TF1("IVGeFunct", "pol1");
 	TF1* IVSiFunct = new TF1("IVSiFunct", "pol1");
@@ -57,22 +63,27 @@ void analyzeData() {
 	IVGeFunct->SetNpx(1000);
 	IVSiFunct->SetNpx(1000);
 
-	IVGeFunct->SetParameters(1., 0.5);
-	IVSiFunct->SetParameters(1., 0.5);
+	IVGeFunct->SetParameters(1., 0.02);
+	IVSiFunct->SetParameters(1., 0.02);
 	
 	for (int i {0}; i < IVGraphGe->GetN(); ++i) {
+		double y {IVGraphGe->GetPointY(i)};
 		IVGraphGe->SetPointY(i, log(IVGraphGe->GetPointY(i)));
-		IVGraphGe->SetPointError(IVGraphGe->GetErrorX(i), IVGraphGe->GetErrorY(i)/IVGraphGe->GetPointY(i));
+		IVGraphGe->SetPointError(IVGraphGe->GetErrorX(i), IVGraphGe->GetErrorY(i)/y);
+		std::cout << "Error set to " << IVGraphGe->GetErrorX(i) << " for point X " << IVGraphGe->GetPointX(i) << std::endl;
 	}
-	for (int i {0}; i < IVGraphGe->GetN(); ++i) {
+	for (int i {0}; i < IVGraphSi->GetN(); ++i) {
+		double y {IVGraphSi->GetPointY(i)};
 		IVGraphSi->SetPointY(i, log(IVGraphSi->GetPointY(i)));
-		IVGraphSi->SetPointError(IVGraphSi->GetErrorX(i), IVGraphSi->GetErrorY(i)/IVGraphSi->GetPointY(i));
+		double ey {IVGraphSi->GetErrorY(i)};
+		IVGraphSi->SetPointError(IVGraphSi->GetErrorX(i), IVGraphSi->GetErrorY(i)/y);
+		//std::cout << "Error set to " << IVGraphSi->GetErrorY(i) << " for point Y " << y << " with Y error " << ey << std::endl;
 	}
 	//	uncomment these and insert appropriate values to reduce the function fit range to the valid data
-	//IVGeFunct->SetRange();
-	//IVSiFunct->SetRange();
-	IVGraphGe->Fit(IVGeFunct);
-	IVGraphSi->Fit(IVSiFunct);
+	IVGeFunct->SetRange(150., 400.);
+	IVSiFunct->SetRange(350., 750.);
+	IVGraphGe->Fit(IVGeFunct, "R");
+	IVGraphSi->Fit(IVSiFunct, "R");
 
 	TCanvas* IVCnvs = new TCanvas("IVCnvs", "Fit Results", 1200, 500);
 	IVCnvs->Divide(2);
@@ -83,7 +94,6 @@ void analyzeData() {
 	IVGraphSi->Draw("APE");
 	IVSiFunct->Draw("SAME");
 
-	TFile* output = new TFile("analyzedData.root", "RECREATE", "Analyzed data");
 
 	calibrationG->Write();
 	calibrationLine->Write();
