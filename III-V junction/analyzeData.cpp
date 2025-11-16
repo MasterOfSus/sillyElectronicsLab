@@ -5,6 +5,7 @@
 #include <TFile.h>
 #include <TCanvas.h>
 #include <cmath>
+#include <TMultiGraph.h>
 
 void analyzeData() {
 	
@@ -63,8 +64,9 @@ void analyzeData() {
 	IVGeFunct->SetNpx(1000);
 	IVSiFunct->SetNpx(1000);
 
-	IVGeFunct->SetParameters(1., 0.02);
-	IVSiFunct->SetParameters(1., 0.02);
+	IVGeFunct->SetParameters(1., 0.025);
+	IVSiFunct->SetParameters(1., 0.05);
+	IVSiFunct->SetParLimits(1, 0.01, 0.5);
 	
 	for (int i {0}; i < IVGraphGe->GetN(); ++i) {
 		double y {IVGraphGe->GetPointY(i)};
@@ -81,8 +83,8 @@ void analyzeData() {
 		//std::cout << "Error set to " << IVGraphSi->GetErrorY(i) << " for point Y " << y << " with Y error " << ey << std::endl;
 	}
 	//	uncomment these and insert appropriate values to reduce the function fit range to the valid data
-	IVGeFunct->SetRange(150., 400.);
-	IVSiFunct->SetRange(350., 750.);
+	IVGeFunct->SetRange(75., 150.);
+	IVSiFunct->SetRange(350., 700.);
 	std::cout << "\nGermanium fit results:\n";
 	IVGraphGe->Fit(IVGeFunct, "R");
 	std::cout << "Final #etaV_T = " << 1/IVGeFunct->GetParameter(1) << ", I0 = " << IVGeFunct->GetParameter(0) << std::endl;
@@ -100,6 +102,14 @@ void analyzeData() {
 	IVGraphSi->Draw("APE");
 	IVSiFunct->Draw("SAME");
 
+	TMultiGraph* IVGraphs = new TMultiGraph("IVGraphs", "Comparison of responses for Si and Ge based junctions");
+	IVGraphs->Add(IVGraphGe);
+	IVGraphs->Add(IVGraphSi);
+	TCanvas* IVCompCnvs = new TCanvas("IVCompCnvs", "IV comparison canvas.", 1200, 900);
+	IVCompCnvs->cd();
+	IVGraphs->SetDrawOption("APE");
+	IVGraphs->Draw("APE");
+	IVCompCnvs->Write();
 
 	calibrationG->Write();
 	calibrationLine->Write();
