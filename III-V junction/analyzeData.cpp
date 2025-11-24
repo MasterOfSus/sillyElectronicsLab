@@ -6,6 +6,7 @@
 #include <TCanvas.h>
 #include <cmath>
 #include <TMultiGraph.h>
+#include <TLegend.h>
 
 void analyzeData() {
 	
@@ -42,6 +43,8 @@ void analyzeData() {
 	IVGraphSi->GetYaxis()->SetTitle("I (mA)");
 	IVGraphGe->SetMarkerStyle(43);
 	IVGraphSi->SetMarkerStyle(33);
+	IVGraphGe->SetMarkerSize(2);
+	IVGraphSi->SetMarkerSize(2);
 	IVGraphGe->SetMarkerColor(kGreen - 1);
 	IVGraphSi->SetMarkerColor(kBlue - 6);
 	IVGraphGe->SetDrawOption("APE");
@@ -57,8 +60,8 @@ void analyzeData() {
 	IVSiFunct->SetParName(0, "ln(I_0)");
 	IVGeFunct->SetParName(1, "1/#etaV_T");
 	IVSiFunct->SetParName(1, "1/#etaV_T");
-	IVGeFunct->SetLineColor(kOrange - 7);
-	IVSiFunct->SetLineColor(kMagenta - 2);
+	IVGeFunct->SetLineColor(kOrange + 5);
+	IVSiFunct->SetLineColor(kGreen + 3);
 	IVGeFunct->SetLineWidth(2);
 	IVGeFunct->SetLineWidth(2);
 	IVGeFunct->SetNpx(1000);
@@ -83,8 +86,8 @@ void analyzeData() {
 		//std::cout << "Error set to " << IVGraphSi->GetErrorY(i) << " for point Y " << y << " with Y error " << ey << std::endl;
 	}
 	//	uncomment these and insert appropriate values to reduce the function fit range to the valid data
-	IVGeFunct->SetRange(75., 150.);
-	IVSiFunct->SetRange(350., 700.);
+	IVGeFunct->SetRange(75., 250.);
+	IVSiFunct->SetRange(450., 700.);
 	std::cout << "\nGermanium fit results:\n";
 	IVGraphGe->Fit(IVGeFunct, "R");
 	std::cout << "Final #etaV_T = " << 1/IVGeFunct->GetParameter(1) << ", I0 = " << IVGeFunct->GetParameter(0) << std::endl;
@@ -102,13 +105,19 @@ void analyzeData() {
 	IVGraphSi->Draw("APE");
 	IVSiFunct->Draw("SAME");
 
-	TMultiGraph* IVGraphs = new TMultiGraph("IVGraphs", "Comparison of responses for Si and Ge based junctions");
+	TMultiGraph* IVGraphs = new TMultiGraph("IVGraphs", "I-V graphs for Ge and Si junctions");
 	IVGraphs->Add(IVGraphGe);
 	IVGraphs->Add(IVGraphSi);
-	TCanvas* IVCompCnvs = new TCanvas("IVCompCnvs", "IV comparison canvas.", 1200, 900);
+	TCanvas* IVCompCnvs = new TCanvas("IVCompCnvs", "IV comparison canvas.", 800, 600);
+	TLegend* IVCompLgnd = new TLegend(0.55, 0.12, 0.9, 0.33);
+	IVCompLgnd->AddEntry(IVGraphGe, "Ge junction exp. data", "lep");
+	IVCompLgnd->AddEntry(IVGeFunct, "Ge fit function (drawn in fit range)");
+	IVCompLgnd->AddEntry(IVGraphSi, "Si junction exp. data", "lep");
+	IVCompLgnd->AddEntry(IVSiFunct, "Si fit function (drawn in fit range)");
 	IVCompCnvs->cd();
 	IVGraphs->SetDrawOption("APE");
 	IVGraphs->Draw("APE");
+	IVCompLgnd->Draw("SAME");
 	IVCompCnvs->Write();
 
 	calibrationG->Write();
