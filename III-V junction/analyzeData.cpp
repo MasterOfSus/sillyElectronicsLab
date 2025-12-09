@@ -108,6 +108,8 @@ void analyzeData() {
 	TMultiGraph* IVGraphs = new TMultiGraph("IVGraphs", "I-V graphs for Ge and Si junctions");
 	IVGraphs->Add(IVGraphGe);
 	IVGraphs->Add(IVGraphSi);
+	IVGraphs->GetYaxis()->SetTitle("ln(I/(1mA)) (adimensional)");
+	IVGraphs->GetXaxis()->SetTitle("Junction #DeltaV (mV)");
 	TCanvas* IVCompCnvs = new TCanvas("IVCompCnvs", "IV comparison canvas.", 800, 600);
 	TLegend* IVCompLgnd = new TLegend(0.55, 0.12, 0.9, 0.33);
 	IVCompLgnd->AddEntry(IVGraphGe, "Ge junction exp. data", "lep");
