@@ -49,8 +49,10 @@ void analyzeData() {
 	IV100Fct->SetRange(22., 26.);
 
 	// Fitting
+	std::cout << "50 muA fit results:" << std::endl;
 	IVGraph50->Fit(IV50Fct, "R");
 	std::cout << "Resulting exit conductance: (" << 1/IV50Fct->GetParameter(1) << " +/- " << IV50Fct->GetParError(1)/std::pow(IV50Fct->GetParameter(1), 2.) << ") mS" << std::endl;
+	std::cout << "100 muA fit results:" << std::endl;
 	IVGraph100->Fit(IV100Fct, "R");
 	std::cout << "Resulting exit conductance: (" << 1/IV100Fct->GetParameter(1) << " +/- " << IV100Fct->GetParError(1)/std::pow(IV100Fct->GetParameter(1), 2.) << ") mS" << std::endl;
 	size_t gainI {8};
@@ -83,10 +85,10 @@ void analyzeData() {
 	IVGraphs->GetXaxis()->SetTitle("-I (mA)");
 	IVGraphs->GetYaxis()->SetTitle("-#DeltaV (V)");
 	TCanvas* IVCompCnvs = new TCanvas("IVCompCnvs", "IV comparison canvas.", 800, 600);
-	TLegend* IVCompLgnd = new TLegend(0.55, 0.12, 0.9, 0.33);
-	IVCompLgnd->AddEntry(IVGraph50, "100 #muV I_{B} exp. data", "lep");
+	TLegend* IVCompLgnd = new TLegend(0.15, 0.65, 0.45, 0.85);
+	IVCompLgnd->AddEntry(IVGraph50, "100 #muV I_{B} experimental data", "lep");
 	IVCompLgnd->AddEntry(IV50Fct, "100 #muV I_{B} fit function (drawn in fit range)");
-	IVCompLgnd->AddEntry(IVGraph100, "200 #muV I_{B} exp. data", "lep");
+	IVCompLgnd->AddEntry(IVGraph100, "200 #muV I_{B} experimental data", "lep");
 	IVCompLgnd->AddEntry(IV100Fct, "200 #muV I_{B} fit function (drawn in fit range)");
 	IVCompCnvs->cd();
 	IVGraphs->SetDrawOption("APE");
