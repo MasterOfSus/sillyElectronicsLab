@@ -79,17 +79,17 @@ void analyzeData() {
 	IVGraph100->Draw("APE");
 	IV100Fct->Draw("SAME");
 
-	TMultiGraph* IVGraphs = new TMultiGraph("IVGraphs", "I-V graphs for 100 and 200 #muA base currents");
+	TMultiGraph* IVGraphs = new TMultiGraph("IVGraphs", "Grafici I-V per correnti di base da 50 e 100 #muA");
 	IVGraphs->Add(IVGraph50);
 	IVGraphs->Add(IVGraph100);
 	IVGraphs->GetXaxis()->SetTitle("-I (mA)");
 	IVGraphs->GetYaxis()->SetTitle("-#DeltaV (V)");
 	TCanvas* IVCompCnvs = new TCanvas("IVCompCnvs", "IV comparison canvas.", 800, 600);
-	TLegend* IVCompLgnd = new TLegend(0.15, 0.65, 0.45, 0.85);
-	IVCompLgnd->AddEntry(IVGraph50, "100 #muV I_{B} experimental data", "lep");
-	IVCompLgnd->AddEntry(IV50Fct, "100 #muV I_{B} fit function (drawn in fit range)");
-	IVCompLgnd->AddEntry(IVGraph100, "200 #muV I_{B} experimental data", "lep");
-	IVCompLgnd->AddEntry(IV100Fct, "200 #muV I_{B} fit function (drawn in fit range)");
+	TLegend* IVCompLgnd = new TLegend(0.15, 0.675, 0.5, 0.85);
+	IVCompLgnd->AddEntry(IVGraph50, "Dati sperimentali per I_{B} = 50 #muV", "lep");
+	IVCompLgnd->AddEntry(IV50Fct, "Funzione di fit per I_{B} = 50 #muV");
+	IVCompLgnd->AddEntry(IVGraph100, "Dati sperimentali per I_{B} = 100 #muV", "lep");
+	IVCompLgnd->AddEntry(IV100Fct, "Funzione di fit per I_{B} = 100 #muV");
 	IVCompCnvs->cd();
 	IVGraphs->SetDrawOption("APE");
 	IVGraphs->Draw("APE");
